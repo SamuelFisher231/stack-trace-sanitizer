@@ -25,3 +25,10 @@ The trade-off is that filtering is heuristic. It recognises paths by shape — `
 ## Awkward edge
 
 The parser handles V8 (`at fn (file:l:c)`) and SpiderMonkey (`fn@file:l:c`). JSC stack strings follow neither shape and are ignored rather than guessed at: lines that do not match either grammar are dropped, so a Safari stack currently yields `[]` from `parseStackTrace`. This is a deliberate choice over producing half-correct frames.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
